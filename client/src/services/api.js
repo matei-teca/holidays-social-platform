@@ -5,3 +5,4 @@ const API = axios.create({
 });
 
 export const getPosts = () => API.get("/posts");
+export const createPost = (newPost) => API.post("/posts", newPost);
