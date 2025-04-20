@@ -1,0 +1,21 @@
+.post-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    max-width: 600px;
+    background-color: #fff;
+  }
+  
+  .post-image {
+    width: 100%;
+    margin-top: 0.5rem;
+    border-radius: 8px;
+  }
+  
+  .post-timestamp {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 0.5rem;
+  }
+  
