@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Comment = require("../models/Comment");
+const auth = require("../middleware/auth");
 
 // Get comments for a post
 router.get("/:postId", async (req, res) => {
@@ -13,15 +14,20 @@ router.get("/:postId", async (req, res) => {
 });
 
 // Create comment
-router.post("/", async (req, res) => {
-  const { postId, author, text } = req.body;
+router.post("/", auth, async (req, res) => {
+  const { postId, text } = req.body;
   try {
-    const newComment = new Comment({ postId, author, text });
-    const saved = await newComment.save();
+    const comment = new Comment({
+      postId,
+      text,
+      author: req.user.username,
+    });
+    const saved = await comment.save();
     res.status(201).json(saved);
-  } catch (err) {
-    res.status(400).json({ error: "Failed to post comment" });
+  } catch {
+    res.status(400).json({ error: "Failed to comment" });
   }
 });
+
 
 module.exports = router;

@@ -10,12 +10,17 @@ app.use(express.urlencoded({ extended: false }))
 
 const PORT = process.env.PORT || 9001;
 
+
 // Routes
 const postRoutes = require("./routes/posts");
 app.use("/api/posts", postRoutes);
 
 const commentRoutes = require("./routes/comments");
 app.use("/api/comments", commentRoutes);
+
+const authRoutes = require("./routes/auth");
+app.use("/api/auth", authRoutes);
+
 
 // Connect to MongoDB and start server
 mongoose

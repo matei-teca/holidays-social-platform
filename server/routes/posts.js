@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Post = require("../models/Post");
+const auth = require("../middleware/auth");
 
 // GET all posts
 router.get("/", async (req, res) => {
@@ -31,17 +32,19 @@ console.log("📥 Incoming POST request with body:", req.body); // Add this line
 });
 
 // Like a post
-router.patch("/:id/like", async (req, res) => {
+router.patch("/:id/like", auth, async (req, res) => {
   try {
-    const post = await Post.findByIdAndUpdate(
-      req.params.id,
-      { $inc: { likes: 1 } },
-      { new: true }
-    );
-    res.json(post);
-  } catch (err) {
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ error: "Post not found" });
+
+    // Optional: prevent multiple likes from same user using post.likes array
+    post.likes += 1;
+    const updated = await post.save();
+    res.json(updated);
+  } catch {
     res.status(400).json({ error: "Failed to like post" });
   }
 });
+
 
 module.exports = router;
