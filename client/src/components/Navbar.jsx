@@ -11,6 +11,7 @@ const Navbar = () => {
         <>
           <span>Welcome, {user.username}!</span>{" "}
           <button onClick={logout}>Logout</button>
+          <Link to={`/profile/${user.username}`}>My Profile</Link>
         </>
       ) : (
         <>

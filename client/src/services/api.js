@@ -21,3 +21,6 @@ export const createComment = (data) => API.post(`/comments`, data);
 
 export const register = (data) => API.post("/auth/register", data);
 export const login = (data) => API.post("/auth/login", data);
+
+export const getProfile    = (username) => API.get(`/users/${username}`);
+export const updateProfile = (data)     => API.put(`/users`, data);

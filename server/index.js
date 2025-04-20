@@ -21,6 +21,9 @@ app.use("/api/comments", commentRoutes);
 const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);
 
+const userRoutes = require("./routes/users");
+app.use("/api/users", userRoutes);
+
 
 // Connect to MongoDB and start server
 mongoose
