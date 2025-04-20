@@ -30,4 +30,18 @@ console.log("📥 Incoming POST request with body:", req.body); // Add this line
   }
 });
 
+// Like a post
+router.patch("/:id/like", async (req, res) => {
+  try {
+    const post = await Post.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { likes: 1 } },
+      { new: true }
+    );
+    res.json(post);
+  } catch (err) {
+    res.status(400).json({ error: "Failed to like post" });
+  }
+});
+
 module.exports = router;

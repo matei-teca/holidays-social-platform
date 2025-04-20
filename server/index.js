@@ -14,6 +14,9 @@ const PORT = process.env.PORT || 9001;
 const postRoutes = require("./routes/posts");
 app.use("/api/posts", postRoutes);
 
+const commentRoutes = require("./routes/comments");
+app.use("/api/comments", commentRoutes);
+
 // Connect to MongoDB and start server
 mongoose
   .connect(process.env.MONGO_URI, {
