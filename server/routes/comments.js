@@ -20,7 +20,7 @@ router.post("/", auth, async (req, res) => {
     const comment = new Comment({
       postId,
       text,
-      author: req.user.username,
+      author: req.user.username, // This is correct
     });
     const saved = await comment.save();
     res.status(201).json(saved);
@@ -28,6 +28,7 @@ router.post("/", auth, async (req, res) => {
     res.status(400).json({ error: "Failed to comment" });
   }
 });
+
 
 
 module.exports = router;

@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";  // Import useAuth hook
 import { getComments, createComment } from "../services/api";
 import "./styles/CommentSection.css";
 
 const CommentSection = ({ postId }) => {
+  const { user } = useAuth();  // Get user data from AuthContext
   const [comments, setComments] = useState([]);
-  const [form, setForm] = useState({ author: "", text: "" });
+  const [form, setForm] = useState({ text: "" });
 
   useEffect(() => {
     const fetch = async () => {
@@ -21,9 +23,9 @@ const CommentSection = ({ postId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await createComment({ ...form, postId });
+      const res = await createComment({ ...form, postId, author: user?.username });  // Use username from AuthContext
       setComments((prev) => [res.data, ...prev]);
-      setForm({ author: "", text: "" });
+      setForm({ text: "" });
     } catch (err) {
       console.error("Comment failed:", err);
     }
@@ -32,13 +34,6 @@ const CommentSection = ({ postId }) => {
   return (
     <div className="comment-section">
       <form onSubmit={handleSubmit}>
-        <input
-          name="author"
-          placeholder="Your name"
-          value={form.author}
-          onChange={(e) => setForm({ ...form, author: e.target.value })}
-          required
-        />
         <input
           name="text"
           placeholder="Write a comment..."

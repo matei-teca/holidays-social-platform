@@ -14,16 +14,15 @@ router.get("/", async (req, res) => {
 });
 
 // POST a new post
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
+  const { holiday, content, image } = req.body;
 
-console.log("📥 Incoming POST request with body:", req.body); // Add this line
-
-  const { author, holiday, content, image } = req.body;
+  // Get the username from the authenticated user
+  const { username } = req.user;
 
   try {
-    const newPost = new Post({ author, holiday, content, image });
+    const newPost = new Post({ author: username, holiday, content, image });
     const savedPost = await newPost.save();
-    console.log("✅ New post saved:", savedPost); // helpful log
     res.status(201).json(savedPost);
   } catch (err) {
     console.error("❌ Error saving post:", err.message);
