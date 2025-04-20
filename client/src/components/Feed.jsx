@@ -3,7 +3,7 @@ import PostCard from "./PostCard";
 import { getPosts } from "../services/api";
 import "./styles/Feed.css";
 
-const Feed = ({ externalPosts = [] }) => {
+const Feed = ({ newPosts = [] }) => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -18,7 +18,7 @@ const Feed = ({ externalPosts = [] }) => {
     fetchPosts();
   }, []);
 
-  const combinedPosts = [...externalPosts, ...posts];
+  const combinedPosts = [...newPosts, ...posts];
 
   return (
     <div className="feed">

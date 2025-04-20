@@ -15,7 +15,7 @@ const Home = () => {
         Welcome to the Holiday Social Platform 🎉
       </h1>
       <PostForm onPostCreated={handleNewPost} />
-      <Feed externalPosts={posts} />
+      <Feed newPosts={posts} />
     </div>
   );
 };
