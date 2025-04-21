@@ -1,0 +1,49 @@
+.app-footer {
+    background: var(--panel-bg);
+    border-top: 1px solid var(--border-color);
+    padding: var(--spacing-sm) var(--spacing);
+    margin-top: var(--spacing-lg);
+    font-size: 0.875rem;
+    color: var(--muted-color);
+  }
+  
+  .footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  
+  .footer-left {
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .footer-right a {
+    margin-left: var(--spacing-lg);
+    color: var(--text-color);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  
+  .footer-right a:hover,
+  .footer-right a:focus {
+    color: var(--accent-color);
+  }
+  
+  /* On mobile, stack links */
+  @media (max-width: var(--bp-mobile)) {
+    .footer-container {
+      flex-direction: column;
+      text-align: center;
+    }
+    .footer-right {
+      margin-top: var(--spacing-xs);
+    }
+    .footer-right a {
+      display: inline-block;
+      margin: var(--spacing-xs);
+    }
+  }
+  
