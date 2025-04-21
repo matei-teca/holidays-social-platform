@@ -1,21 +1,18 @@
 import { useState } from "react";
 import Feed from "../components/Feed";
 import PostForm from "../components/PostForm";
+import "./styles/Home.css";
 
 const Home = () => {
-  const [posts, setPosts] = useState([]);
+  const [newPosts, setNewPosts] = useState([]);
 
-  const handleNewPost = (newPost) => {
-    setPosts((prev) => [newPost, ...prev]);
-  };
+  const handleNewPost = (p) => setNewPosts((prev) => [p, ...prev]);
 
   return (
-    <div>
-      <h1 style={{ textAlign: "center", marginTop: "1rem" }}>
-        Welcome to the Holiday Social Platform 🎉
-      </h1>
+    <div className="home-page container">
+      <h1>Welcome to the hDays Social Platform 🎉</h1>
       <PostForm onPostCreated={handleNewPost} />
-      <Feed newPosts={posts} />
+      <Feed newPosts={newPosts} />
     </div>
   );
 };

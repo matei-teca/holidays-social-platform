@@ -1,23 +1,55 @@
 .profile-page {
-    max-width: 600px;
-    margin: 2rem auto;
-    text-align: center;
-  }
-  .avatar {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 1rem;
-  }
-  .profile-form input,
-  .profile-form textarea {
-    width: 100%;
-    padding: 0.5rem;
-    margin: 0.5rem 0;
-  }
-  .bio {
-    white-space: pre-wrap;
-    margin-top: 1rem;
-  }
-  
+  max-width: 900px;
+  margin: var(--spacing-lg) auto;
+  text-align: center;
+  background: var(--card-bg);
+  padding: var(--spacing);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  animation: fadeInUp 0.4s ease;
+}
+.profile-page h1 {
+  margin-bottom: var(--spacing);
+  color: var(--heading-color);
+}
+.avatar {
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: var(--spacing);
+  border: 3px solid var(--primary-color);
+}
+.bio {
+  margin-bottom: var(--spacing);
+  color: var(--muted-color);
+}
+.profile-form input,
+.profile-form textarea {
+  width: 100%;
+  padding: var(--spacing-xs);
+  margin-bottom: var(--spacing);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+.profile-form input:focus,
+.profile-form textarea:focus {
+  border-color: var(--primary-color);
+}
+.profile-form button {
+  background: var(--primary-color);
+  color: var(--card-bg);
+  padding: var(--spacing-xs) var(--spacing);
+  margin-right: var(--spacing-sm);
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.profile-form button:hover {
+  background: var(--accent-color);
+  transform: translateY(-2px);
+}

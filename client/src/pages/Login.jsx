@@ -2,6 +2,7 @@ import { useState } from "react";
 import { login as loginApi } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import "./styles/Login.css";
 
 const Login = () => {
   const { login } = useAuth();
@@ -20,10 +21,23 @@ const Login = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="login-page" onSubmit={handleSubmit}>
       <h2>Login</h2>
-      <input name="username" placeholder="Username" value={form.username} onChange={(e) => setForm({ ...form, username: e.target.value })} required />
-      <input type="password" name="password" placeholder="Password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
+      <input
+        name="username"
+        placeholder="Username"
+        value={form.username}
+        onChange={(e) => setForm((f) => ({ ...f, username: e.target.value }))}
+        required
+      />
+      <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        value={form.password}
+        onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
+        required
+      />
       <button type="submit">Login</button>
     </form>
   );

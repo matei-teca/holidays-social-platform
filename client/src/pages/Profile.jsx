@@ -1,9 +1,8 @@
-// src/pages/Profile.jsx
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getProfile, updateProfile } from "../services/api";
 import { useAuth } from "../context/AuthContext";
-import "./styles/Profile.css";  // You can create this
+import "./styles/Profile.css";
 
 const Profile = () => {
   const { username: routeUser } = useParams();
@@ -19,7 +18,7 @@ const Profile = () => {
   const [form, setForm] = useState({ avatarUrl: "", bio: "" });
 
   useEffect(() => {
-    getProfile(routeUser).then(res => setProfile(res.data));
+    getProfile(routeUser).then((res) => setProfile(res.data));
   }, [routeUser]);
 
   const handleSave = async () => {
@@ -52,13 +51,17 @@ const Profile = () => {
             name="avatarUrl"
             placeholder="Avatar URL"
             value={form.avatarUrl}
-            onChange={e => setForm(f => ({ ...f, avatarUrl: e.target.value }))}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, avatarUrl: e.target.value }))
+            }
           />
           <textarea
             name="bio"
             placeholder="Your bio"
             value={form.bio}
-            onChange={e => setForm(f => ({ ...f, bio: e.target.value }))}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, bio: e.target.value }))
+            }
           />
           <button onClick={handleSave}>Save</button>
           <button onClick={() => setEditMode(false)}>Cancel</button>

@@ -11,20 +11,31 @@ const PostCard = ({ post }) => {
       const updated = await likePost(post._id);
       setLikes(updated.data.likes);
     } catch (err) {
-      console.error("Failed to like post:", err);
+      console.error(err);
     }
   };
 
   return (
     <div className="post-card">
-      <h3>{post.author}</h3>
-      <p><strong>{post.holiday}</strong></p>
-      <p>{post.content}</p>
-      {post.image && <img src={post.image} alt="post" className="post-image" />}
-      <p className="post-timestamp">{new Date(post.createdAt).toLocaleString()}</p>
+      <div className="post-card-header">
+        <h3>{post.author}</h3>
+        <span className="post-timestamp">
+          {new Date(post.createdAt).toLocaleString()}
+        </span>
+      </div>
 
-      <div className="reactions">
-        <button onClick={handleLike}>❤️ {likes}</button>
+      <div className="post-card-body">
+        <p className="holiday">{post.holiday}</p>
+        <p>{post.content}</p>
+        {post.image && (
+          <img src={post.image} alt="post" className="post-image" />
+        )}
+      </div>
+
+      <div className="post-card-footer">
+        <div className="reactions">
+          <button onClick={handleLike}>❤️ {likes}</button>
+        </div>
       </div>
 
       <CommentSection postId={post._id} />

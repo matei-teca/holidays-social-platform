@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { register } from "../services/api";
+import { register as registerApi } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import "./styles/Register.css";
 
 const Register = () => {
   const { login } = useAuth();
@@ -11,8 +12,8 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await register(form);
-      login(res.data); // save token
+      const res = await registerApi(form);
+      login(res.data);
       navigate("/");
     } catch {
       alert("Registration failed");
@@ -20,10 +21,27 @@ const Register = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="register-page" onSubmit={handleSubmit}>
       <h2>Register</h2>
-      <input name="username" placeholder="Username" value={form.username} onChange={(e) => setForm({ ...form, username: e.target.value })} required />
-      <input type="password" name="password" placeholder="Password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
+      <input
+        name="username"
+        placeholder="Username"
+        value={form.username}
+        onChange={(e) =>
+          setForm((f) => ({ ...f, username: e.target.value }))
+        }
+        required
+      />
+      <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        value={form.password}
+        onChange={(e) =>
+          setForm((f) => ({ ...f, password: e.target.value }))
+        }
+        required
+      />
       <button type="submit">Register</button>
     </form>
   );

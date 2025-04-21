@@ -1,39 +1,49 @@
 .comment-section {
-    margin-top: 1rem;
-    border-top: 1px solid #eee;
-    padding-top: 0.5rem;
-  }
-  
-  .comment-section form {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .comment-section input {
-    flex: 1;
-    padding: 0.3rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .comment-section button {
-    background: #007bff;
-    color: white;
-    border: none;
-    padding: 0.3rem 0.6rem;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .comment-section ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .comment-section li {
-    font-size: 0.9rem;
-    margin-bottom: 0.3rem;
-  }
-  
+  background: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+  animation: fadeInUp 0.3s ease both;
+}
+
+.comment-section form {
+  display: flex;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
+}
+
+.comment-section input {
+  flex: 1;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-xs);
+  font-size: 0.9rem;
+}
+
+.comment-section button {
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 0 var(--spacing-sm);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.comment-section ul {
+  list-style: none;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.comment-section li {
+  padding: var(--spacing-xxs) 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.comment-section li:last-child {
+  border-bottom: none;
+}

@@ -1,0 +1,48 @@
+nav {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background: var(--panel-bg);
+  border-bottom: 1px solid var(--border-color);
+  padding: var(--spacing) 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+}
+
+.nav-left a,
+.nav-right a {
+  margin-right: var(--spacing);
+  font-weight: 500;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.nav-right span {
+  /* margin-right: calc(var(--spacing-xs) - 10px); */
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+/* Make the logout button visible and snug */
+.nav-right button {
+  background-color: var(--accent-color);
+  color: #fff;
+  border: none;
+  padding: var(--spacing-xxs) var(--spacing-sm);
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+  margin: 0 var(--spacing-xs);
+  transition: background 0.2s;
+}
+
+.nav-right button:hover,
+.nav-right button:focus {
+  filter: brightness(0.9);
+  color: red;
+}
+
