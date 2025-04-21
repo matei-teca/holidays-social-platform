@@ -46,8 +46,16 @@
 }
 
 .post-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 0.75rem 1rem;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--border-color);
+}
+
+.footer-actions-left {
+  display: flex;
+  gap: var(--spacing-sm);
 }
 
 .reactions button {
@@ -70,3 +78,18 @@
 .post-page-footer .join-btn:hover {
   filter: brightness(0.9);
 }
+
+.delete-btn {
+  background: transparent;
+  border: none;
+  color: #e63946;
+  font-size: 1.1rem;
+  margin-left: var(--spacing-sm);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.delete-btn:hover,
+.delete-btn:focus {
+  color: #d62828;
+}
+

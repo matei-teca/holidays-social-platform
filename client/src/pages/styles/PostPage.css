@@ -71,3 +71,18 @@
   .post-page-footer .join-btn:hover {
     filter: brightness(0.9);
   }
+
+  .delete-btn {
+    background: transparent;
+    border: none;
+    color: #e63946;
+    font-size: 1.1rem;
+    margin-left: var(--spacing-sm);
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .delete-btn:hover,
+  .delete-btn:focus {
+    color: #d62828;
+  }
+  

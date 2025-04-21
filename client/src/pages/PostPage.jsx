@@ -1,33 +1,77 @@
+// client/src/pages/PostPage.jsx
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { getPost } from "../services/api";
-import { joinPost } from "../services/api";
+import { useParams, useNavigate } from "react-router-dom";
+import {
+  getPost,
+  likePost,
+  joinPost,
+  deletePost
+} from "../services/api";
+import { useAuth } from "../context/AuthContext";
 import CommentSection from "../components/CommentSection";
 import "./styles/PostPage.css";
 
 const PostPage = () => {
   const { id } = useParams();
-  const [post, setPost] = useState(null);
-  const [error, setError] = useState("");
-  const user = JSON.parse(localStorage.getItem("user"))?.username;
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
+  const [post, setPost] = useState(null);
+  const [likes, setLikes] = useState(0);
+  const [joiners, setJoiners] = useState([]);
+
+  // Fetch the post on mount
   useEffect(() => {
-    getPost(id)
-      .then(res => setPost(res.data))
-      .catch(() => setError("Failed to load post."));
+    const fetch = async () => {
+      try {
+        const res = await getPost(id);
+        setPost(res.data);
+        setLikes(res.data.likes || 0);
+        setJoiners(res.data.joiners || []);
+      } catch (err) {
+        console.error("Error loading post:", err);
+      }
+    };
+    fetch();
   }, [id]);
 
-  if (error) return <div className="post-page error">{error}</div>;
-  if (!post) return <div className="post-page loading">Loading…</div>;
+  // Like handler
+  const handleLike = async () => {
+    try {
+      const updated = await likePost(id);
+      setLikes(updated.data.likes);
+      setPost(updated.data);
+    } catch (err) {
+      console.error("Like failed:", err);
+    }
+  };
 
+  // Join/Leave handler
   const handleJoin = async () => {
     try {
       const updated = await joinPost(id);
+      setJoiners(updated.data.joiners);
       setPost(updated.data);
-    } catch {
-      console.error(err);
+    } catch (err) {
+      console.error("Join failed:", err);
     }
   };
+
+  // Delete handler
+  const handleDelete = async () => {
+    if (!window.confirm("Delete this post?")) return;
+    try {
+      await deletePost(id);
+      navigate("/", { replace: true });
+    } catch (err) {
+      console.error("Delete failed:", err);
+    }
+  };
+
+  if (!post) return <p>Loading…</p>;
+
+  const hasJoined = joiners.includes(user?.username);
+  const isAuthor  = user?.username === post.author;
 
   return (
     <div className="post-page container">
@@ -42,27 +86,31 @@ const PostPage = () => {
         <div className="post-page-body">
           <p className="holiday">{post.holiday}</p>
           <p className="content">{post.content}</p>
-          {post.image && <img src={post.image} alt="" className="image" />}
+          {post.image && (
+            <img
+              src={post.image}
+              alt="Post"
+              className="post-page-image"
+            />
+          )}
         </div>
 
         <div className="post-page-footer">
-          <button
-            className="like-btn"
-            onClick={async () => {
-              try {
-                const updated = await API.patch(`/posts/${id}/like`);
-                setPost(updated.data);
-              } catch {}
-            }}
-          >
-            ❤️ {post.likes}
+          <button className="like-btn" onClick={handleLike}>
+            ❤️ {likes}
           </button>
 
-        {post.joinable && (
-          <button className="join-btn" onClick={handleJoin}>
-            {post.joiners.includes(user) ? "Leave" : "Join"} ({post.joiners.length})
-          </button>
-        )}
+          {post.joinable && (
+            <button className="join-btn" onClick={handleJoin}>
+              {hasJoined ? "Leave" : "Join"} ({joiners.length})
+            </button>
+          )}
+
+          {isAuthor && (
+            <button className="delete-btn" onClick={handleDelete}>
+              Delete Post
+            </button>
+          )}
         </div>
       </div>
 

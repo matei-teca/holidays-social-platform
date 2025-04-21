@@ -26,7 +26,6 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST a new post
- // POST a new post
  router.post("/", auth, async (req, res) => {
     const { holiday, content, image, joinable } = req.body;
     const { username } = req.user;
@@ -46,6 +45,32 @@ router.get("/:id", async (req, res) => {
      } catch (err) {
     console.error("❌ Error saving post:", err.message);
     res.status(400).json({ error: "Invalid post data" });
+  }
+});
+
+// DELETE a post (only its author can)
+router.delete("/:id", auth, async (req, res) => {
+  try {
+    // findByIdAndDelete returns the deleted doc or null if not found
+    const deleted = await Post.findByIdAndDelete(req.params.id);
+
+    if (!deleted) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+    // enforce author check *after* fetching
+    if (deleted.author !== req.user.username) {
+      // you could also re-create the doc if you wanted to be fancy,
+      // but simpler is to refuse outright before deletion:
+      return res.status(403).json({ error: "You can only delete your own posts" });
+    }
+
+    return res.json({ message: "Post successfully deleted", id: req.params.id });
+  } catch (err) {
+    console.error("❌ Error in DELETE /api/posts/:id:", err);
+    // send the actual error message in development:
+    return res
+      .status(500)
+      .json({ error: "Server error while deleting post", details: err.message });
   }
 });
 
