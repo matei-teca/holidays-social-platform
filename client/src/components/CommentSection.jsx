@@ -9,13 +9,12 @@ const CommentSection = ({ postId }) => {
   const [text, setText] = useState("");
 
   useEffect(() => {
-    getComments(postId)
-      .then((res) => setComments(res.data))
-      .catch((err) => console.error(err));
+    getComments(postId).then((res) => setComments(res.data));
   }, [postId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    e.stopPropagation();   // prevent navigating when submitting
     try {
       const res = await createComment({ postId, text });
       setComments((c) => [res.data, ...c]);
@@ -26,7 +25,7 @@ const CommentSection = ({ postId }) => {
   };
 
   return (
-    <div className="comment-section">
+    <div className="comment-section" onClick={(e) => e.stopPropagation()}>
       <form onSubmit={handleSubmit}>
         <input
           placeholder="Write a comment..."

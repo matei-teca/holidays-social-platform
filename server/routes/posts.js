@@ -13,6 +13,18 @@ router.get("/", async (req, res) => {
   }
 });
 
+// GET a single post by ID
+router.get("/:id", async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ error: "Post not found" });
+    res.json(post);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 // POST a new post
 router.post("/", auth, async (req, res) => {
   const { holiday, content, image } = req.body;

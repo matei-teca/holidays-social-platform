@@ -13,6 +13,7 @@ API.interceptors.request.use((config) => {
 });
 
 export const getPosts = () => API.get("/posts");
+export const getPost = (id) => API.get(`/posts/${id}`);
 export const createPost = (newPost) => API.post("/posts", newPost);
 export const likePost = (id) => API.patch(`/posts/${id}/like`);
 
