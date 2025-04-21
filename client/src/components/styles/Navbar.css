@@ -1,5 +1,5 @@
 nav {
-  position: sticky;
+  /* position: sticky; */
   top: 0;
   width: 100%;
   background: var(--panel-bg);
@@ -9,8 +9,6 @@ nav {
   justify-content: space-between;
   align-items: center;
   z-index: 100;
-  /* necessary for absolute children */
-  position: sticky;
 }
 
 /* Desktop nav links */
@@ -105,4 +103,8 @@ nav {
 /* And ensure your desktop nav stays visible: */
 .nav-right {
   display: flex !important;
+}
+
+.menu-container {
+  position: relative;
 }
