@@ -20,6 +20,34 @@
 .post-form textarea:focus {
   border-color: var(--primary-color);
 }
+
+/* Each row lines up */
+.post-form-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Style the label + checkbox */
+.joinable-checkbox {
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+  color: var(--text-color);
+  cursor: pointer; /* make the whole label clickable */
+}
+
+.joinable-checkbox input[type="checkbox"] {
+  margin-right: var(--spacing-xs);
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Tweak your Post button spacing */
+.post-form button {
+  margin-top: var(--spacing-sm);
+}
+
 .post-form button {
   background: var(--accent-color);
   color: var(--card-bg);
@@ -34,3 +62,4 @@
   background: var(--primary-color);
   transform: translateY(-2px);
 }
+

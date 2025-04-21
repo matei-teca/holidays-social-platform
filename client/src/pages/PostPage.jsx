@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getPost } from "../services/api";
+import { joinPost } from "../services/api";
 import CommentSection from "../components/CommentSection";
 import "./styles/PostPage.css";
 
@@ -8,6 +9,7 @@ const PostPage = () => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [error, setError] = useState("");
+  const user = JSON.parse(localStorage.getItem("user"))?.username;
 
   useEffect(() => {
     getPost(id)
@@ -17,6 +19,15 @@ const PostPage = () => {
 
   if (error) return <div className="post-page error">{error}</div>;
   if (!post) return <div className="post-page loading">Loading…</div>;
+
+  const handleJoin = async () => {
+    try {
+      const updated = await joinPost(id);
+      setPost(updated.data);
+    } catch {
+      console.error(err);
+    }
+  };
 
   return (
     <div className="post-page container">
@@ -46,6 +57,12 @@ const PostPage = () => {
           >
             ❤️ {post.likes}
           </button>
+
+        {post.joinable && (
+          <button className="join-btn" onClick={handleJoin}>
+            {post.joiners.includes(user) ? "Leave" : "Join"} ({post.joiners.length})
+          </button>
+        )}
         </div>
       </div>
 

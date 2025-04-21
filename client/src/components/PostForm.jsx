@@ -10,10 +10,14 @@ const PostForm = ({ onPostCreated }) => {
     holiday: "",
     content: "",
     image: "",
+    joinable: false,
   });
 
   const handleChange = (e) =>
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+
+  const handleCheckbox = (e) =>
+    setForm((f) => ({ ...f, joinable: e.target.checked }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,6 +53,18 @@ const PostForm = ({ onPostCreated }) => {
         value={form.image}
         onChange={handleChange}
       />
+      <div className="post-form-row">
+        <label className="joinable-checkbox">
+          <input
+            type="checkbox"
+            name="joinable"
+            checked={form.joinable}
+            onChange={handleCheckbox}
+          />
+          <span>Joinable</span>
+        </label>
+      </div>
+
       <button type="submit">Post 🎉</button>
     </form>
   );

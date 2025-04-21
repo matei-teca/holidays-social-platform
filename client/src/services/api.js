@@ -16,6 +16,7 @@ export const getPosts = () => API.get("/posts");
 export const getPost = (id) => API.get(`/posts/${id}`);
 export const createPost = (newPost) => API.post("/posts", newPost);
 export const likePost = (id) => API.patch(`/posts/${id}/like`);
+export const joinPost  = (id) => API.patch(`/posts/${id}/join`);
 
 export const getComments = (postId) => API.get(`/comments/${postId}`);
 export const createComment = (data) => API.post(`/comments`, data);
@@ -25,3 +26,6 @@ export const login = (data) => API.post("/auth/login", data);
 
 export const getProfile    = (username) => API.get(`/users/${username}`);
 export const updateProfile = (data)     => API.put(`/users`, data);
+
+export const getJoinableEvents = () => API.get("/events/joinable");
+export const getJoinedEvents   = () => API.get("/events/joined");

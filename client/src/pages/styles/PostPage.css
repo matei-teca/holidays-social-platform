@@ -57,3 +57,17 @@
     font-size: 1.1rem;
   }
   
+  .post-card-footer button,
+  .post-page-footer .join-btn {
+    margin-left: var(--spacing-sm);
+    background-color: var(--accent-color);
+    color: #fff;
+    padding: var(--spacing-xxs) var(--spacing-sm);
+    border-radius: var(--border-radius);
+    transition: filter 0.2s;
+  }
+
+  .post-card-footer button:hover,
+  .post-page-footer .join-btn:hover {
+    filter: brightness(0.9);
+  }

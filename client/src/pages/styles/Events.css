@@ -1,0 +1,47 @@
+.events-page {
+  padding: var(--spacing-lg) 0;
+}
+
+/* Tabs container */
+.tabs {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Tab buttons */
+.tabs button {
+  flex: 1;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.tabs button:hover {
+  background: var(--background-color);
+}
+
+.tabs button.active {
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--card-bg);
+  font-weight: 600;
+}
+
+/* Grid for PostCards */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+/* Empty / error messages */
+.events-empty,
+.events-error {
+  color: var(--muted-color);
+  text-align: center;
+  margin-top: var(--spacing-sm);
+}

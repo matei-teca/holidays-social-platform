@@ -9,6 +9,14 @@ nav {
   justify-content: space-between;
   align-items: center;
   z-index: 100;
+  /* necessary for absolute children */
+  position: sticky;
+}
+
+/* Desktop nav links */
+.nav-right {
+  display: flex;
+  align-items: center;
 }
 
 .nav-left a,
@@ -17,18 +25,12 @@ nav {
   font-weight: 500;
 }
 
-.nav-right {
-  display: flex;
-  align-items: center;
-}
-
 .nav-right span {
-  /* margin-right: calc(var(--spacing-xs) - 10px); */
+  margin-right: var(--spacing-xs);
   color: var(--text-color);
   font-weight: 500;
 }
 
-/* Make the logout button visible and snug */
 .nav-right button {
   background-color: var(--accent-color);
   color: #fff;
@@ -37,12 +39,70 @@ nav {
   border-radius: var(--border-radius);
   font-size: 0.9rem;
   margin: 0 var(--spacing-xs);
-  transition: background 0.2s;
+  transition: filter 0.2s;
 }
-
 .nav-right button:hover,
 .nav-right button:focus {
   filter: brightness(0.9);
-  color: red;
 }
 
+/* Hamburger toggle button */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+/* Mobile menu dropdown */
+.mobile-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: var(--spacing);
+  background: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  flex-direction: column;
+  min-width: 160px;
+  overflow: hidden;
+}
+
+.mobile-menu.open {
+  display: flex;
+}
+
+.mobile-menu a,
+.mobile-menu button,
+.mobile-menu span {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  text-align: left;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.mobile-menu a {
+  color: var(--text-color);
+}
+.mobile-menu a:hover {
+  background: var(--background-color);
+}
+
+/* Instead, always show the toggle: */
+.menu-toggle {
+  display: block;         /* make sure it’s never hidden */
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-color);
+  margin-left: var(--spacing);
+}
+
+/* And ensure your desktop nav stays visible: */
+.nav-right {
+  display: flex !important;
+}

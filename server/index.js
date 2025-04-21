@@ -24,6 +24,9 @@ app.use("/api/auth", authRoutes);
 const userRoutes = require("./routes/users");
 app.use("/api/users", userRoutes);
 
+ const eventsRoutes  = require("./routes/events");
+ app.use("/api/events", eventsRoutes);
+
 
 // Connect to MongoDB and start server
 mongoose
