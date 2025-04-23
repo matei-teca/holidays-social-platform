@@ -61,6 +61,7 @@ const Navbar = () => {
               <Link to="/events" onClick={() => setMenuOpen(false)}>
                 Events
               </Link>
+              {user && <Link to="/chat">Chat</Link>}
               <button onClick={handleLogout}>Logout</button>
             </div>
           </div>

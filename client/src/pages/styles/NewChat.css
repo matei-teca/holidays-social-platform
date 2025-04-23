@@ -1,0 +1,37 @@
+.new-chat-form {
+    max-width: 400px;
+    margin: var(--spacing-lg) auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .new-chat-form h2 {
+    text-align: center;
+    color: var(--heading-color);
+  }
+  
+  .new-chat-form label {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.95rem;
+    color: var(--text-color);
+  }
+  
+  .new-chat-form select,
+  .new-chat-form textarea {
+    margin-top: var(--spacing-xs);
+    padding: var(--spacing-xs);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+  }
+  
+  .new-chat-form button {
+    align-self: flex-end;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background-color: var(--primary-color);
+    color: #fff;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+  }
+  

@@ -1,0 +1,66 @@
+/* client/src/components/styles/ChatWindow.css */
+
+.chat-window {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-sm);
+  }
+  
+  .msg {
+    margin-bottom: var(--spacing-sm);
+    max-width: 70%;
+    padding: var(--spacing-xs);
+    border-radius: var(--border-radius);
+    background: var(--panel-bg);
+  }
+  
+  .msg.mine {
+    margin-left: auto;
+    background: var(--accent-color);
+    color: white;
+  }
+  
+  .msg-user {
+    display: block;
+    font-weight: 600;
+    margin-bottom: var(--spacing-xxs);
+  }
+  
+  .msg-text {
+    margin: 0;
+  }
+  
+  .msg-time {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--muted-color);
+    text-align: right;
+  }
+  
+  .chat-input {
+    display: flex;
+    padding: var(--spacing-sm);
+    border-top: 1px solid var(--border-color);
+  }
+  
+  .chat-input input {
+    flex: 1;
+    padding: var(--spacing-xs);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    margin-right: var(--spacing-xs);
+  }
+  
+  .chat-input button {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--primary-color);
+    color: white;
+    border-radius: var(--border-radius);
+  }
+  

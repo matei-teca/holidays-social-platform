@@ -1,46 +1,119 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-require("dotenv").config();
+// server/index.js
 
+const express    = require("express");
+const http       = require("http");
+const mongoose   = require("mongoose");
+const cors       = require("cors");
+const dotenv     = require("dotenv");
+const jwt        = require("jsonwebtoken");
+const { Server } = require("socket.io");
+
+// load .env
+dotenv.config();
+
+// express setup
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: false }));
 
-const PORT = process.env.PORT || 9001;
-
-
-// Routes
-const postRoutes = require("./routes/posts");
-app.use("/api/posts", postRoutes);
-
+// import routes
+const postRoutes    = require("./routes/posts");
 const commentRoutes = require("./routes/comments");
-app.use("/api/comments", commentRoutes);
+const authRoutes    = require("./routes/auth");
+const userRoutes    = require("./routes/users");
+const eventsRoutes  = require("./routes/events");
+const convosRoutes  = require("./routes/conversations");
 
-const authRoutes = require("./routes/auth");
-app.use("/api/auth", authRoutes);
+// mount API routes
+app.use("/api/posts",         postRoutes);
+app.use("/api/comments",      commentRoutes);
+app.use("/api/auth",          authRoutes);
+app.use("/api/users",         userRoutes);
+app.use("/api/events",        eventsRoutes);
+app.use("/api/conversations", convosRoutes);
 
-const userRoutes = require("./routes/users");
-app.use("/api/users", userRoutes);
+// simple health‑check
+app.get("/", (req, res) => res.send("Hello World!"));
 
- const eventsRoutes  = require("./routes/events");
- app.use("/api/events", eventsRoutes);
-
-
-// Connect to MongoDB and start server
+// connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => {
-    console.log("✅ MongoDB connected");
-    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-  })
+  .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
+// create HTTP server & attach Socket.IO
+const server = http.createServer(app);
+const io     = new Server(server, {
+  cors: { origin: "*" }
+});
 
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
+// load Conversation model for socket handlers
+const Conversation = require("./models/Conversation");
+
+// JWT secret for socket auth
+const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
+
+// Socket.IO middleware: authenticate by token
+io.use((socket, next) => {
+  const token = socket.handshake.auth.token;
+  if (!token) return next(new Error("Authentication error"));
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    socket.data.userId   = decoded.id;
+    socket.data.username = decoded.username;
+    next();
+  } catch (err) {
+    next(new Error("Authentication error"));
+  }
+});
+
+// Socket.IO connection
+io.on("connection", (socket) => {
+  console.log(`🔌 Socket connected: ${socket.id}, user ${socket.data.userId}`);
+
+  // join a conversation room
+  socket.on("joinConvo", (convoId) => {
+    socket.join(convoId);
+  });
+
+  // handle incoming messages
+  socket.on("sendMessage", async ({ convoId, content }) => {
+    try {
+      const convo = await Conversation.findById(convoId);
+      if (!convo) return;
+
+      // append message
+      convo.messages.push({
+        sender:  socket.data.userId,
+        content,
+      });
+      convo.updatedAt = Date.now();
+      await convo.save();
+
+      // populate sender info
+      const populated = await convo.populate(
+        "messages.sender",
+        "username avatarUrl"
+      );
+
+      // last message
+      const newMsg = populated.messages[populated.messages.length - 1];
+
+      // broadcast to room
+      io.to(convoId).emit("newMessage", { convoId, message: newMsg });
+    } catch (err) {
+      console.error("❌ Message send error:", err);
+    }
+  });
+});
+
+// start listening
+const PORT = process.env.PORT || 9001;
+server.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});

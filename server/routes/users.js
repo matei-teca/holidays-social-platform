@@ -4,6 +4,18 @@ const router = express.Router();
 const User   = require("../models/User");
 const auth   = require("../middleware/auth");
 
+// GET all users (for selecting a chat partner)
+router.get("/", auth, async (req, res) => {
+  try {
+    // only send back the fields you need (e.g. _id and username)
+    const users = await User.find().select("_id username");
+    res.json(users);
+  } catch (err) {
+    console.error("Failed to fetch users:", err);
+    res.status(500).json({ error: "Failed to fetch users" });
+  }
+});
+
 // GET a public profile by username
 router.get("/:username", async (req, res) => {
   try {
