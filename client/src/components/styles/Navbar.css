@@ -1,26 +1,26 @@
 nav {
-  /* position: sticky; */
   top: 0;
   width: 100%;
   background: var(--panel-bg);
   border-bottom: 1px solid var(--border-color);
-  padding: var(--spacing) 2rem;
+  padding: var(--spacing-sm) var(--spacing);
   display: flex;
   justify-content: space-between;
   align-items: center;
   z-index: 100;
 }
 
-/* Desktop nav links */
-.nav-right {
-  display: flex;
-  align-items: center;
-}
-
 .nav-left a,
 .nav-right a {
   margin-right: var(--spacing);
   font-weight: 500;
+  color: var(--text-color);
+  transition: color 0.2s;
+}
+
+.nav-left a:hover,
+.nav-right a:hover {
+  color: var(--accent-color);
 }
 
 .nav-right span {
@@ -30,43 +30,53 @@ nav {
 }
 
 .nav-right button {
-  background-color: var(--accent-color);
+  background-color: var(--primary-color);
   color: #fff;
-  border: none;
   padding: var(--spacing-xxs) var(--spacing-sm);
   border-radius: var(--border-radius);
   font-size: 0.9rem;
   margin: 0 var(--spacing-xs);
-  transition: filter 0.2s;
-}
-.nav-right button:hover,
-.nav-right button:focus {
-  filter: brightness(0.9);
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
-/* Hamburger toggle button */
+.nav-right button:hover,
+.nav-right button:focus {
+  background-color: var(--accent-color);
+  transform: translateY(-1px);
+}
+
+.logout-bttn {
+  color: red !important;
+  background-color: white;
+}
+
 .menu-toggle {
-  display: none;
+  display: block;
   background: none;
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
   color: var(--text-color);
+  margin-left: var(--spacing);
 }
 
-/* Mobile menu dropdown */
+.menu-container {
+  position: relative;
+}
+
 .mobile-menu {
   display: none;
   position: absolute;
   top: 100%;
-  right: var(--spacing);
+  right: 0;
   background: var(--panel-bg);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow);
   flex-direction: column;
-  min-width: 160px;
+  min-width: 180px;
   overflow: hidden;
+  animation: fadeInUp 0.3s ease both;
 }
 
 .mobile-menu.open {
@@ -80,31 +90,9 @@ nav {
   text-align: left;
   width: 100%;
   white-space: nowrap;
-}
-
-.mobile-menu a {
   color: var(--text-color);
 }
+
 .mobile-menu a:hover {
   background: var(--background-color);
-}
-
-/* Instead, always show the toggle: */
-.menu-toggle {
-  display: block;         /* make sure it’s never hidden */
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: var(--text-color);
-  margin-left: var(--spacing);
-}
-
-/* And ensure your desktop nav stays visible: */
-.nav-right {
-  display: flex !important;
-}
-
-.menu-container {
-  position: relative;
 }

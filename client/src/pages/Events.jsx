@@ -40,7 +40,7 @@ const Events = () => {
   if (error) return <p className="events-error">{error}</p>;
 
   return (
-    <div className="events-page container">
+      <div className={`events-page container ${activeTab}`}>
       <div className="tabs">
         <button
           className={activeTab === "joinable" ? "active" : ""}

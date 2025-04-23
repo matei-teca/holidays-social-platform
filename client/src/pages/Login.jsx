@@ -2,7 +2,7 @@ import { useState } from "react";
 import { login as loginApi } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import "./styles/Login.css";
+import "./styles/Auth.css";
 
 const Login = () => {
   const { login } = useAuth();
@@ -22,7 +22,7 @@ const Login = () => {
 
   return (
     <form className="login-page" onSubmit={handleSubmit}>
-      <h2>Login</h2>
+      <h2>Sign in</h2>
       <input
         name="username"
         placeholder="Username"

@@ -1,47 +1,93 @@
 .events-page {
-  padding: var(--spacing-lg) 0;
+  max-width: 720px;
+  margin: var(--spacing-xl) auto;
+  padding: var(--spacing-lg) var(--spacing);
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  animation: fadeInUp 0.4s ease both;
+  font-family: var(--font-base);
 }
 
-/* Tabs container */
-.tabs {
+
+.events-page .tabs {
   display: flex;
   gap: var(--spacing-sm);
   margin-bottom: var(--spacing-lg);
 }
 
-/* Tab buttons */
-.tabs button {
+.events-page .tabs button {
   flex: 1;
   padding: var(--spacing-xs) var(--spacing-sm);
-  background: var(--panel-bg);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius) var(--border-radius) 0 0;
+  background: var(--panel-bg);
+  font-family: var(--font-heading);
   font-size: 1rem;
+  color: var(--text-color);
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
+  transition: background 0.2s, color 0.2s;
 }
 
-.tabs button:hover {
+.events-page .tabs button:hover {
   background: var(--background-color);
 }
 
-.tabs button.active {
+.events-page .tabs button.active {
   background: var(--card-bg);
   border-bottom: 1px solid var(--card-bg);
+  color: var(--heading-color);
   font-weight: 600;
 }
 
-/* Grid for PostCards */
 .events-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: var(--spacing-lg);
 }
 
-/* Empty / error messages */
+.events-page.joined .events-grid {
+  align-items: flex-end;
+}
+
+.event-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.event-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+}
+
+.event-card .post-card-header,
+.event-card .post-card-body,
+.event-card .post-card-footer {
+  padding: var(--spacing);
+}
+
 .events-empty,
 .events-error {
   color: var(--muted-color);
   text-align: center;
-  margin-top: var(--spacing-sm);
+  padding: var(--spacing-lg) 0;
+}
+
+@media (min-width: var(--bp-tablet)) {
+  .events-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+}
+
+@media (max-width: var(--bp-mobile)) {
+  .events-page {
+    padding: var(--spacing-sm);
+    margin: var(--spacing-lg) var(--spacing-sm);
+  }
+  .tabs button {
+    font-size: 0.9rem;
+    padding: var(--spacing-xxs) var(--spacing-xs);
+  }
 }

@@ -25,7 +25,7 @@ const Home = () => {
 
   return (
     <div className="home-page container">
-      <h1>Welcome to the hDays Social Platform 🎉</h1>
+      <h1>welcome to hDays</h1>
       <PostForm onPostCreated={handleNewPost} />
       <Feed
         newPosts={newPosts}

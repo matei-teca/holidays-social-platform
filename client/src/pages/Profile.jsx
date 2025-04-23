@@ -40,10 +40,11 @@ const Profile = () => {
         <button onClick={() => {
           setForm({ avatarUrl: profile.avatarUrl, bio: profile.bio });
           setEditMode(true);
-        }}>
+        }} className = "edit">
           Edit Profile
         </button>
       )}
+      
 
       {editMode ? (
         <div className="profile-form">
@@ -63,8 +64,10 @@ const Profile = () => {
               setForm((f) => ({ ...f, bio: e.target.value }))
             }
           />
-          <button onClick={handleSave}>Save</button>
-          <button onClick={() => setEditMode(false)}>Cancel</button>
+          <div className="profile-form-actions">
+            <button onClick={handleSave}>Save</button>
+            <button className="cancel" onClick={() => setEditMode(false)}>Cancel</button>
+          </div>
         </div>
       ) : (
         <p className="bio">{profile.bio || "No bio yet."}</p>

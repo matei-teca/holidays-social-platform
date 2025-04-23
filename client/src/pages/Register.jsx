@@ -2,7 +2,7 @@ import { useState } from "react";
 import { register as registerApi } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import "./styles/Register.css";
+import "./styles/Auth.css";
 
 const Register = () => {
   const { login } = useAuth();
@@ -22,7 +22,7 @@ const Register = () => {
 
   return (
     <form className="register-page" onSubmit={handleSubmit}>
-      <h2>Register</h2>
+      <h2>Sign up</h2>
       <input
         name="username"
         placeholder="Username"

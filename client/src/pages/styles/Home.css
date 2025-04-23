@@ -1,10 +1,35 @@
 .home-page {
-    max-width: 720px;
-    margin: var(--spacing-lg) auto;
+  max-width: 800px;
+  margin: var(--spacing-xl) auto;
+  padding: var(--spacing);
+  animation: fadeInUp 0.4s ease both;
+}
+
+.home-page h1 {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  font-size: 2.75rem;
+  color: var(--primary-color);
+  font-weight: 600;
+  line-height: 1.2;
+
+  background: conic-gradient(
+    from 180deg at 50% 50%,
+    #4ea8de 0%,
+    #2f3e46 40%,
+    var(--primary-color) 75%,
+    #4ea8de 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (max-width: var(--bp-mobile)) {
+  .home-page {
+    padding: var(--spacing-sm);
   }
+
   .home-page h1 {
-    text-align: center;
-    margin-bottom: var(--spacing-lg);
-    font-size: 2.5rem;
-    color: var(--primary-color);
+    font-size: 2rem;
   }
+}

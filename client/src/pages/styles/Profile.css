@@ -1,55 +1,171 @@
+/* Profile Page Styles */
 .profile-page {
-  max-width: 900px;
-  margin: var(--spacing-lg) auto;
-  text-align: center;
-  background: var(--card-bg);
-  padding: var(--spacing);
-  border: 1px solid var(--border-color);
+  max-width: 640px;
+  margin: var(--spacing-xl) auto;
+  background: var(--panel-bg);
   border-radius: var(--border-radius);
-  box-shadow: var(--shadow-sm);
-  animation: fadeInUp 0.4s ease;
+  box-shadow: var(--shadow);
+  padding: var(--spacing-lg);
+  animation: fadeInUp 0.4s ease both;
+  font-family: var(--font-base);
+  text-align: center;
 }
+
 .profile-page h1 {
-  margin-bottom: var(--spacing);
+  font-family: var(--font-heading);
+  font-size: 2.25rem;
+  margin-bottom: var(--spacing-lg);
   color: var(--heading-color);
 }
-.avatar {
+
+.profile-page .avatar {
   width: 128px;
   height: 128px;
+  margin: 0 auto var(--spacing-lg);
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: var(--spacing);
-  border: 3px solid var(--primary-color);
+  border: 4px solid var(--accent-color);
+  box-shadow: var(--shadow-sm);
 }
-.bio {
-  margin-bottom: var(--spacing);
+
+.profile-page .bio {
+  font-size: 1rem;
+  line-height: 1.6;
   color: var(--muted-color);
+  margin: var(--spacing) 0 var(--spacing-lg); /* top and bottom spacing */
 }
+
+.profile-page button {
+  padding: var(--spacing-xs) var(--spacing-lg);
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  font-family: var(--font-base);
+  transition: background 0.2s, transform 0.2s;
+  cursor: pointer;
+}
+.profile-page button:hover {
+  background: var(--accent-color);
+  transform: translateY(-1px);
+}
+
+/* Edit Form Styles */
+.profile-form {
+  margin-top: var(--spacing-lg);
+}
+
 .profile-form input,
 .profile-form textarea {
   width: 100%;
-  padding: var(--spacing-xs);
-  margin-bottom: var(--spacing);
+  padding: var(--spacing-sm);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   font-size: 1rem;
+  font-family: var(--font-base);
+  margin-bottom: var(--spacing-sm);
   transition: border-color 0.2s;
 }
 .profile-form input:focus,
 .profile-form textarea:focus {
   border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(78,168,222,0.2);
 }
-.profile-form button {
-  background: var(--primary-color);
-  color: var(--card-bg);
-  padding: var(--spacing-xs) var(--spacing);
-  margin-right: var(--spacing-sm);
-  border: none;
+
+.profile-form-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-sm);
+}
+
+.profile-form-actions button {
+  padding: var(--spacing-xs) var(--spacing-lg);
   border-radius: var(--border-radius);
+  font-weight: 600;
   cursor: pointer;
   transition: background 0.2s, transform 0.2s;
 }
-.profile-form button:hover {
+.profile-form-actions button.save {
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+}
+.profile-form-actions button.save:hover {
   background: var(--accent-color);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
+}
+.profile-form-actions button.cancel {
+  background: transparent;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+.profile-form-actions button.cancel:hover {
+  background: var(--background-color);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+/* Align avatar and edit button side-by-side in view mode */
+.profile-page {
+  position: relative;
+  padding-top: var(--spacing-lg);
+}
+
+.profile-page .avatar {
+  float: left;
+  margin-right: var(--spacing-lg);
+}
+
+.profile-page button.edit {
+  float: right;
+  padding: var(--spacing-xxs) var(--spacing-xs); /* compact padding */
+  font-size: 0.75rem; /* readable size */
+  margin-top: var(--spacing-sm); /* added top spacing */
+  border-radius: var(--border-radius);
+  background: var(--primary-color);
+  color: #fff;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.profile-page button.edit:hover {
+  background: var(--accent-color);
+  transform: translateY(-1px);
+}
+
+.profile-page-view::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+.profile-page .avatar {
+  float: left;
+  margin-right: var(--spacing-lg);
+}
+
+.profile-page button.edit {
+  float: right;
+}
+
+.profile-page-view::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+@media (max-width: var(--bp-mobile)) {
+
+  .profile-page {
+    padding: var(--spacing);
+    margin: var(--spacing-lg) var(--spacing);
+  }
+  .profile-page h1 {
+    font-size: 1.75rem;
+  }
+  .avatar {
+    width: 100px;
+    height: 100px;
+  }
 }

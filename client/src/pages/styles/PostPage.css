@@ -1,88 +1,189 @@
+/* PostPage Styles */
 .post-page.container {
-    max-width: 600px;
-    margin: 2rem auto;
-    animation: fadeInUp 0.3s ease both;
+  max-width: 880px;
+  margin: var(--spacing-xl) auto;
+  padding: var(--spacing-lg);
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  animation: fadeInUp 0.4s ease both;
+  font-family: var(--font-base);
+}
+
+.post-page-card {
+  background: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+}
+
+.post-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing);
+  background: var(--panel-bg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.post-page-header .author {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  color: var(--heading-color);
+  margin: 0;
+}
+
+.post-page-header .timestamp {
+  font-size: 0.875rem;
+  color: var(--muted-color);
+}
+
+.post-page-body {
+  padding: var(--spacing);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-color);
+}
+
+.post-page-body .holiday {
+  font-weight: 600;
+  color: var(--accent-color);
+  margin-bottom: var(--spacing-sm);
+}
+
+.post-page-body .content {
+  margin-bottom: var(--spacing-lg);
+}
+
+.post-page-body .post-page-image {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: var(--border-radius);
+  margin-bottom: var(--spacing-lg);
+}
+
+.post-page-footer {
+  padding: var(--spacing);
+  background: var(--panel-bg);
+  border-top: 1px solid var(--border-color);
+  font-size: 0.875rem;
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.post-page-footer button {
+  background-color: var(--primary-color);
+  color: #fff;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 0.875rem;
+  border-radius: var(--border-radius);
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.post-page-footer button:hover {
+  background-color: var(--accent-color);
+  transform: translateY(-2px);
+}
+
+.post-page-footer .delete-btn {
+  background: transparent;
+  color: #e63946;
+  border: none;
+  font-size: 1rem;
+  margin-left: auto;
+  transition: color 0.2s;
+}
+
+.post-page-footer .delete-btn:hover {
+  color: #d62828;
+}
+
+/* CommentSection included */
+.comment-section {
+  margin-top: var(--spacing);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-sm);
+  animation: fadeInUp 0.3s ease both;
+}
+
+.comment-section form {
+  display: flex;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
+}
+
+.comment-section input[type="text"] {
+  flex: 1;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+}
+
+.comment-section button {
+  background-color: var(--primary-color);
+  color: #fff;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.comment-section button:hover {
+  background-color: var(--accent-color);
+  transform: translateY(-1px);
+}
+
+.comment-section ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.comment-section li {
+  padding: var(--spacing-xxs) 0;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.comment-section li:last-child {
+  border-bottom: none;
+}
+
+.comment-section li strong {
+  font-weight: 600;
+  color: var(--heading-color);
+}
+
+@media (max-width: var(--bp-mobile)) {
+  .post-page.container {
+    padding: var(--spacing-sm);
+    margin: var(--spacing-lg) var(--spacing-sm);
   }
-  
-  .post-page-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-sm);
-    margin-bottom: var(--spacing-lg);
-    overflow: hidden;
+  .post-page-header,
+  .post-page-body,
+  .post-page-footer,
+  .comment-section {
+    padding: var(--spacing-sm);
   }
-  
-  .post-page-header {
-    display: flex;
-    justify-content: space-between;
-    padding: var(--spacing-sm) var(--spacing);
-    border-bottom: 1px solid var(--border-color);
-  }
-  
-  .post-page-header .author {
-    margin: 0;
-    color: var(--heading-color);
-  }
-  
-  .post-page-body {
-    padding: var(--spacing);
-  }
-  
-  .post-page-body .holiday {
-    font-weight: 600;
-    color: var(--accent-color);
-    margin-bottom: var(--spacing-xs);
-  }
-  
   .post-page-body .content {
-    margin-bottom: var(--spacing-sm);
+    font-size: 0.95rem;
   }
-  
-  .post-page-body .image {
-    width: 100%;
-    border-radius: var(--border-radius);
-  }
-  
-  .post-page-footer {
-    padding: var(--spacing-sm) var(--spacing);
-    border-top: 1px solid var(--border-color);
-    text-align: right;
-  }
-  
-  .like-btn {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 1.1rem;
-  }
-  
-  .post-card-footer button,
-  .post-page-footer .join-btn {
-    margin-left: var(--spacing-sm);
-    background-color: var(--accent-color);
-    color: #fff;
-    padding: var(--spacing-xxs) var(--spacing-sm);
-    border-radius: var(--border-radius);
-    transition: filter 0.2s;
-  }
-
-  .post-card-footer button:hover,
-  .post-page-footer .join-btn:hover {
-    filter: brightness(0.9);
-  }
-
-  .delete-btn {
-    background: transparent;
-    border: none;
-    color: #e63946;
-    font-size: 1.1rem;
-    margin-left: var(--spacing-sm);
-    cursor: pointer;
-    transition: color 0.2s;
-  }
-  .delete-btn:hover,
-  .delete-btn:focus {
-    color: #d62828;
-  }
-  
+}

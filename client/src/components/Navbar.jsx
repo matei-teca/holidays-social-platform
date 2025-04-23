@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "./styles/Navbar.css";
+import { HomeIcon } from '@heroicons/react/24/outline';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -34,7 +35,9 @@ const Navbar = () => {
   return (
     <nav>
       <div className="nav-left">
-        <Link to="/">Home</Link>
+      <Link to="/" className="nav-home-icon" aria-label="Home">
+        <HomeIcon className="h-5 w-5" />
+      </Link>
       </div>
 
       {user ? (
@@ -62,7 +65,7 @@ const Navbar = () => {
                 Events
               </Link>
               {user && <Link to="/chat">Chat</Link>}
-              <button onClick={handleLogout}>Logout</button>
+              <button onClick={handleLogout} className="logout-bttn">Logout</button>
             </div>
           </div>
         </>

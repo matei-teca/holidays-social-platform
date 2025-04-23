@@ -1,0 +1,103 @@
+/* Login & Register Page Styles */
+.login-page,
+.register-page {
+  max-width: 400px;
+  margin: var(--spacing-lg) auto;
+  background: var(--panel-bg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  animation: fadeInUp 0.4s ease both;
+  font-family: var(--font-base);
+}
+
+.login-page h2,
+.register-page h2 {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  color: var(--heading-color);
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.login-page form,
+.register-page form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-page input,
+.register-page input {
+  width: 100%;
+  padding: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: var(--card-bg);
+}
+
+.login-page input:focus,
+.register-page input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(78, 168, 222, 0.2);
+  outline: none;
+}
+
+/* Centered submit button */
+.login-page button,
+.register-page button {
+  padding: var(--spacing-sm);
+  background: var(--primary-color);
+  color: var(--card-bg);
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.2s, transform 0.2s;
+  margin: var(--spacing) auto 0;  /* <-- centers the button */
+  display: block;
+  min-width: 50%;
+  text-align: center;
+}
+
+.login-page button:hover,
+.register-page button:hover {
+  background: var(--accent-color);
+  transform: translateY(-2px);
+}
+
+/* Optional “Already have an account?” links below the button */
+.login-page .aux,
+.register-page .aux {
+  margin-top: var(--spacing-sm);
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+.login-page .aux a,
+.register-page .aux a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.login-page .aux a:hover,
+.register-page .aux a:hover {
+  color: var(--accent-color);
+  text-decoration: underline;
+}
+
+/* Mobile tweak */
+@media (max-width: var(--bp-mobile)) {
+  .login-page,
+  .register-page {
+    margin: var(--spacing) var(--spacing-sm);
+    padding: var(--spacing);
+  }
+}
