@@ -16,13 +16,12 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-// GET a public profile by username
+// GET public profile (including publicKey!) by username
 router.get("/:username", async (req, res) => {
   try {
-    const user = await User
-      .findOne({ username: req.params.username })
-      .select("username avatarUrl bio");
-    if (!user) return res.status(404).json({ error: "User not found" });
+    const user = await User.findOne({ username: req.params.username })
+      .select("username avatarUrl bio publicKey");
+    if (!user) return res.status(404).json({ error: "Not found" });
     res.json(user);
   } catch (err) {
     console.error(err);
@@ -30,20 +29,31 @@ router.get("/:username", async (req, res) => {
   }
 });
 
-// PUT to update your own profile (requires auth)
+// PUT update your profile (avatar, bio) or publicKey
 router.put("/", auth, async (req, res) => {
-  const { avatarUrl, bio } = req.body;
   try {
+    const updates = {};
+    if (req.body.avatarUrl   != null) updates.avatarUrl = req.body.avatarUrl;
+    if (req.body.bio         != null) updates.bio       = req.body.bio;
+    if (req.body.publicKey   != null) updates.publicKey = req.body.publicKey;
+
     const updated = await User.findByIdAndUpdate(
       req.user.id,
-      { avatarUrl, bio },
-      { new: true, select: "username avatarUrl bio" }
+      updates,
+      { new: true, select: "username avatarUrl bio publicKey" }
     );
     res.json(updated);
   } catch (err) {
-    console.error(err);
-    res.status(400).json({ error: "Failed to update profile" });
+    console.error("Failed to update user:", err);
+    res.status(400).json({ error: "Update failed" });
   }
+});
+
+// PATCH /api/users/keys
+router.put("/keys", auth, async (req, res) => {
+  const { publicKey } = req.body;
+  await User.findByIdAndUpdate(req.user.id, { publicKey });
+  res.sendStatus(204);
 });
 
 module.exports = router;

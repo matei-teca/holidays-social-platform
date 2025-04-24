@@ -1,5 +1,4 @@
 // server/index.js
-
 const express    = require("express");
 const http       = require("http");
 const mongoose   = require("mongoose");
@@ -33,7 +32,7 @@ app.use("/api/users",         userRoutes);
 app.use("/api/events",        eventsRoutes);
 app.use("/api/conversations", convosRoutes);
 
-// simple health‑check
+// simple health-check
 app.get("/", (req, res) => res.send("Hello World!"));
 
 // connect to MongoDB
@@ -82,7 +81,7 @@ io.on("connection", (socket) => {
   });
 
   // handle incoming messages
-  socket.on("sendMessage", async ({ convoId, content }) => {
+  socket.on("sendMessage", async ({ convoId, cipher, nonce, content }) => {
     try {
       const convo = await Conversation.findById(convoId);
       if (!convo) return;
@@ -90,22 +89,31 @@ io.on("connection", (socket) => {
       // append message
       convo.messages.push({
         sender:  socket.data.userId,
-        content,
+        cipher,    // if encrypted
+        nonce,     // if encrypted
+        content    // plaintext fallback
       });
-      convo.updatedAt = Date.now();
       await convo.save();
 
       // populate sender info
-      const populated = await convo.populate(
-        "messages.sender",
-        "username avatarUrl"
-      );
+      const populated = await convo
+        .populate("messages.sender", "username avatarUrl")
+        .execPopulate?.()  // for Mongoose <6; if you're on >=6, .populate() returns a promise
+        || await convo.populate("messages.sender", "username avatarUrl");
 
       // last message
       const newMsg = populated.messages[populated.messages.length - 1];
 
       // broadcast to room
-      io.to(convoId).emit("newMessage", { convoId, message: newMsg });
+      io.to(convoId).emit("newMessage", {
+        convoId,
+        _id:      newMsg._id,
+        sender:   newMsg.sender,
+        cipher:   newMsg.cipher,
+        nonce:    newMsg.nonce,
+        content:  newMsg.content,
+        createdAt:newMsg.createdAt
+      });
     } catch (err) {
       console.error("❌ Message send error:", err);
     }
