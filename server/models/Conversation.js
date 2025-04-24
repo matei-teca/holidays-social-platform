@@ -14,6 +14,7 @@ const messageSchema = new Schema({
 });
 
 const conversationSchema = new Schema({
+  name:         { type: String }, 
   participants: [{ type: Schema.Types.ObjectId, ref: "User" }],
   messages:     [messageSchema],
   updatedAt:    { type: Date, default: Date.now },

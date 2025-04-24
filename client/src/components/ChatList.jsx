@@ -1,30 +1,72 @@
-// client/src/components/ChatList.jsx
-import React from "react";
-import { Link }       from "react-router-dom";
-import { useAuth }    from "../context/AuthContext";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate }           from "react-router-dom";
+import { useAuth }                     from "../context/AuthContext";
+import { getConversations }            from "../services/api";
+import GroupChatModal                  from "./GroupChatModal";
 import "./styles/ChatList.css";
+import groupIcon                       from "../assets/group-icon.png";
+import defaultAvatar                   from "../assets/default-avatar.webp"
 
-export default function ChatList({ convos }) {
-  const { user } = useAuth();
+export default function ChatList() {
+  const { user }                      = useAuth();
+  const navigate                      = useNavigate();
+  const [convos, setConvos]           = useState([]);
+  const [showGroupModal, setShowGroupModal] = useState(false);
+
+  useEffect(() => {
+    getConversations()
+      .then((res) => setConvos(res.data))
+      .catch((err) => console.error(err));
+  }, []);
+
+  const handleGroupCreated = (newConvo) => {
+    setConvos((prev) => [newConvo, ...prev]);
+    navigate(`/chat/${newConvo._id}`);
+  };
 
   return (
     <div className="chat-list">
-      <Link to="new" className="new-chat-btn">
-        + New Chat
-      </Link>
+      <div className="chat-list-actions">
+        <Link to="new" className="new-chat-btn">+ New Chat</Link>
+        <button
+          className="new-group-chat-btn"
+          onClick={() => setShowGroupModal(true)}
+        >
+          + New Group Chat
+        </button>
+      </div>
 
       {convos.map((c) => {
-        const other = c.participants.find((p) => p._id !== user.id);
-        const title = other ? other.username : "Group Chat";
-        const avatarUrl = other?.avatarUrl || "/assets/group-icon.png";
+        const isGroup = Boolean(c.name);
+        const label   = isGroup
+          ? c.name
+          : c.participants.find((p) => p.username !== user.username)?.username ||
+            user.username;
+
+        // Use a default group icon for group chats
+        const avatarUrl = isGroup
+          ? groupIcon
+          : c.participants.find((p) => p.username !== user.username)
+              ?.avatarUrl || defaultAvatar;
 
         return (
-          <Link key={c._id} to={`/chat/${c._id}`} className="chat-item">
-            <img src={avatarUrl} alt={title} className="avatar-sm" />
-            <span className="chat-item-name">{title}</span>
+          <Link
+            key={c._id}
+            to={`/chat/${c._id}`}
+            className="chat-list-item"
+          >
+            <img src={avatarUrl} alt={label} className="avatar-sm" />
+            <span className="chat-item-name">{label}</span>
           </Link>
         );
       })}
+
+      {showGroupModal && (
+        <GroupChatModal
+          onClose={() => setShowGroupModal(false)}
+          onCreated={handleGroupCreated}
+        />
+      )}
     </div>
   );
 }

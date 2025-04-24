@@ -1,11 +1,6 @@
-// client/src/components/ChatWindow.jsx
-
 import React, { useEffect, useState, useRef } from "react";
 import { useParams }                          from "react-router-dom";
-import {
-  getConversation,
-  getProfile
-} from "../services/api";
+import { getConversation, getProfile }        from "../services/api";
 import socket                                 from "../socket";
 import { useAuth }                            from "../context/AuthContext";
 import sodium                                 from "libsodium-wrappers";
@@ -17,49 +12,58 @@ import "./styles/ChatWindow.css";
 
 export default function ChatWindow() {
   const { convoId } = useParams();
-  const { user }    = useAuth(); // { id, username, token }
+  const { user }    = useAuth();
 
+  const [convoMeta, setConvoMeta]       = useState(null);
   const [messages, setMessages]         = useState([]);
   const [text, setText]                 = useState("");
   const [sharedSecret, setSharedSecret] = useState(null);
   const bottomRef                       = useRef();
 
-  // 1️⃣ Initialize: fetch history, derive secret, decrypt, join room
+  // 1️⃣ Initialize: fetch convo, derive secret if 1:1, decrypt, join room
   useEffect(() => {
-    let isMounted = true;
+    let mounted = true;
 
-    async function initChat() {
+    async function init() {
       try {
         const { data: convo } = await getConversation(convoId);
-        if (!isMounted) return;
+        if (!mounted) return;
+        setConvoMeta(convo);
 
-        // find the "other" user
-        const other = convo.participants.find(p => p.username !== user.username);
+        // Group chat? Just show plaintext
+        if (convo.name) {
+          setMessages(convo.messages);
+          socket.emit("joinConvo", convoId);
+          return;
+        }
+
+        // 1:1 chat: find the other user
+        const other = convo.participants.find((p) => p.username !== user.username);
         if (!other) {
           setMessages(convo.messages);
           socket.emit("joinConvo", convoId);
           return;
         }
 
-        // fetch their publicKey
+        // Fetch their public key
         const { data: profile } = await getProfile(other.username);
-        if (!isMounted) return;
-
+        if (!mounted) return;
         if (!profile.publicKey) {
-          console.warn("Other user has no publicKey, skipping E2EE");
+          console.warn("Other user has no publicKey—sending plaintext");
           setMessages(convo.messages);
           socket.emit("joinConvo", convoId);
           return;
         }
 
-        // derive shared secret
+        // ECDH key-exchange
         await sodium.ready;
         const theirPub = sodium.from_base64(profile.publicKey);
         const myPriv   = sodium.from_base64(myPrivateKey);
         const secret   = sodium.crypto_scalarmult(myPriv, theirPub);
+        setSharedSecret(secret);
 
-        // decrypt stored messages
-        const decrypted = convo.messages.map(m => {
+        // Decrypt prior messages
+        const decrypted = convo.messages.map((m) => {
           if (m.cipher && m.nonce) {
             try {
               const pt = sodium.crypto_secretbox_open_easy(
@@ -69,94 +73,111 @@ export default function ChatWindow() {
               );
               return { ...m, content: sodium.to_string(pt) };
             } catch {
-              return { ...m, content: "[Unable to decrypt]" };
+              return { ...m, content: "[cannot decrypt]" };
             }
           }
-          return m;
+          return m; // plaintext fallback
         });
-
-        if (isMounted) {
-          setSharedSecret(secret);
-          setMessages(decrypted);
-        }
+        setMessages(decrypted);
 
         socket.emit("joinConvo", convoId);
-      } catch (err) {
-        console.error("Chat init failed:", err);
+      } catch (e) {
+        console.error("Chat init error:", e);
       }
     }
 
-    initChat();
-    return () => { isMounted = false; };
+    init();
+    return () => { mounted = false; };
   }, [convoId, user.username]);
 
-  // 2️⃣ Listen for new encrypted messages, decrypt them
+  // 2️⃣ Listen to incoming messages
   useEffect(() => {
-    const handler = ({ convoId: id, cipher, nonce, sender, createdAt, content }) => {
+    const onNew = ({ convoId: id, cipher, nonce, sender, createdAt, content }) => {
       if (id !== convoId) return;
-      let text;
-      if (cipher && nonce && sharedSecret) {
-        const pt = sodium.crypto_secretbox_open_easy(
-          sodium.from_base64(cipher),
-          sodium.from_base64(nonce),
-          sharedSecret
-        );
-        text = sodium.to_string(pt);
+
+      let txt;
+      if (sharedSecret && cipher && nonce) {
+        try {
+          const pt = sodium.crypto_secretbox_open_easy(
+            sodium.from_base64(cipher),
+            sodium.from_base64(nonce),
+            sharedSecret
+          );
+          txt = sodium.to_string(pt);
+        } catch {
+          txt = "[decrypt failed]";
+        }
       } else {
-        // fallback plaintext
-        text = content;
+        txt = content;
       }
-      setMessages(msgs => [
+
+      setMessages((msgs) => [
         ...msgs,
-        { _id: `${Date.now()}`, sender, content: text, createdAt }
+        { _id: Date.now().toString(), sender, content: txt, createdAt },
       ]);
     };
 
-    socket.on("newMessage", handler);
-    return () => { socket.off("newMessage", handler); };
+    socket.on("newMessage", onNew);
+    return () => socket.off("newMessage", onNew);
   }, [convoId, sharedSecret]);
 
-  // 3️⃣ Auto-scroll on new messages
+  // 3️⃣ Auto‐scroll
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // 4️⃣ Encrypt & send (or fallback to plaintext)
+  // 4️⃣ Send
   const send = async () => {
-    const msg = text.trim();
-    if (!msg) return;
+    const m = text.trim();
+    if (!m) return;
 
-    if (!sharedSecret) {
-        const ok = window.confirm(
-          "⚠️ The other user does not have a public key set, so this chat is unencrypted. \n \n Any messages you send will be in plaintext. Continue?"
-        );
-        if (!ok) return;
+    // warn if 1:1 without E2EE
+    if (!convoMeta?.name && !sharedSecret) {
+      if (!window.confirm("⚠️ Sending unencrypted plaintext. Continue?")) {
+        return;
+      }
     }
 
-    if (sharedSecret) {
+    if (convoMeta?.name) {
+      // group: plaintext
+      socket.emit("sendMessage", { convoId, content: m });
+    } else if (sharedSecret) {
+      // 1:1 encrypted
+      await sodium.ready;
       const nonce  = sodium.randombytes_buf(sodium.crypto_secretbox_NONCEBYTES);
       const cipher = sodium.crypto_secretbox_easy(
-        sodium.from_string(msg),
+        sodium.from_string(m),
         nonce,
         sharedSecret
       );
       socket.emit("sendMessage", {
         convoId,
         cipher: sodium.to_base64(cipher),
-        nonce:  sodium.to_base64(nonce)
+        nonce:  sodium.to_base64(nonce),
       });
     } else {
-      socket.emit("sendMessage", { convoId, content: msg });
+      // plaintext fallback
+      socket.emit("sendMessage", { convoId, content: m });
     }
 
     setText("");
   };
 
+  // Chat header: group name or other user
+  const header = () => {
+    if (!convoMeta) return "";
+    if (convoMeta.name) return convoMeta.name;
+    const other = convoMeta.participants.find((p) => p.username !== user.username);
+    return other?.username || user.username;
+  };
+
   return (
     <div className="chat-window">
+      <header className="chat-header">{header()}</header>
+
       <div className="messages">
-        {messages.map(m => {
-          const mine = String(m.sender._id) === String(user.id);
+        {messages.map((m) => {
+          const mine = String(m.sender._id) === user.id;
           return (
             <div key={m._id} className={`msg ${mine ? "mine" : ""}`}>
               <span className="msg-user">{m.sender.username}</span>
@@ -175,8 +196,8 @@ export default function ChatWindow() {
           type="text"
           placeholder="Type a message…"
           value={text}
-          onChange={e => setText(e.target.value)}
-          onKeyDown={e => e.key === "Enter" && send()}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && send()}
         />
         <button onClick={send}>Send</button>
       </div>
