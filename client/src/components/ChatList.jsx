@@ -1,10 +1,11 @@
+// client/src/components/ChatList.jsx
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate }           from "react-router-dom";
 import { useAuth }                     from "../context/AuthContext";
 import { getConversations }            from "../services/api";
 import GroupChatModal                  from "./GroupChatModal";
 import groupIcon                       from "../assets/group-icon.png";
-import defaultAvatar                   from "../assets/default-avatar.webp"
+import defaultAvatar                   from "../assets/default-avatar.webp";
 import "./styles/ChatList.css";
 
 export default function ChatList() {
@@ -13,12 +14,14 @@ export default function ChatList() {
   const [convos, setConvos]           = useState([]);
   const [showGroupModal, setShowGroupModal] = useState(false);
 
+  // Fetch conversations on mount
   useEffect(() => {
     getConversations()
       .then((res) => setConvos(res.data))
-      .catch((err) => console.error(err));
+      .catch((err) => console.error("Failed to load convos", err));
   }, []);
 
+  // When a new group is created, prepend and navigate
   const handleGroupCreated = (newConvo) => {
     setConvos((prev) => [newConvo, ...prev]);
     navigate(`/chat/${newConvo._id}`);
@@ -27,7 +30,9 @@ export default function ChatList() {
   return (
     <div className="chat-list">
       <div className="chat-list-actions">
-        <Link to="new" className="new-chat-btn">+ New Chat</Link>
+        <Link to="new" className="new-chat-btn">
+          + New Chat
+        </Link>
         <button
           className="new-group-chat-btn"
           onClick={() => setShowGroupModal(true)}
@@ -38,12 +43,11 @@ export default function ChatList() {
 
       {convos.map((c) => {
         const isGroup = Boolean(c.name);
-        const label   = isGroup
+        const label = isGroup
           ? c.name
-          : c.participants.find((p) => p.username !== user.username)?.username ||
-            user.username;
+          : c.participants.find((p) => p.username !== user.username)
+              ?.username || user.username;
 
-        // Use a default group icon for group chats
         const avatarUrl = isGroup
           ? groupIcon
           : c.participants.find((p) => p.username !== user.username)

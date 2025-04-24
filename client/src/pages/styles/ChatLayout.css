@@ -1,33 +1,71 @@
+/* 1) Desktop layout */
 .chat-layout {
+  display: flex;
+  position: relative;
+}
+.chat-sidebar {
+  width: 280px;
+  border-right: 1px solid var(--border-color);
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+}
+.chat-main {
+  flex: 1;
+  padding: var(--spacing-sm);
+}
+
+/* 2) Vertical “☰” tab */
+.sidebar-toggle {
+  display: none; /* hidden on desktop */
+  position: absolute;
+  top: var(--spacing-lg);
+  /* will be nudged by media rules */
+  left: 0;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  background: var(--accent-color);
+  color: #fff;
+  border: none;
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  cursor: pointer;
+  transition: left 0.3s ease;
+  z-index: 250;
+}
+
+/* 3) Mobile behavior: collapse sidebar */
+@media (max-width: 600px) {
+  .sidebar-toggle {
     display: flex;
-    height: 85vh;
-    border: 1px solid rgb(175, 175, 175);
-    border-left: none;
-    border-radius: 10px;
-  }
-  .chat-sidebar {
-    width: 280px;
-    border-right: 1px solid var(--border-color);
-    overflow-y: auto;
-  }
-  .chat-main {
-    flex: 1;
-    overflow-y: auto;
-    padding: var(--spacing-sm);
+    align-items: center;
+    justify-content: center;
+    top: 55vh;
+    width: 1rem;
   }
 
-  .new-chat-btn {
-    display: block;
-    margin: var(--spacing-sm);
-    padding: var(--spacing-xs);
-    background: var(--accent-color);
-    color: #fff;
-    text-align: center;
-    border-radius: var(--border-radius);
-    text-decoration: none;
-    font-weight: 500;
+  .chat-sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    /* hide off the left edge */
+    transform: translateX(-100%);
+    box-shadow: 2px 0 12px rgba(0,0,0,0.1);
+    z-index: 200;
   }
-  .new-chat-btn:hover {
-    filter: brightness(0.9);
+
+  /* when open, slide back in */
+  .chat-sidebar.open {
+    transform: translateX(0);
   }
-  
+
+  /* after opening, push the ☰ tab out to the sidebar’s edge */
+  .chat-sidebar.open ~ .sidebar-toggle {
+    left: 280px;
+  }
+
+  /* main content just fills the area */
+  .chat-main {
+    margin-left: 0;
+  }
+}
