@@ -3,9 +3,9 @@ import { Link, useNavigate }           from "react-router-dom";
 import { useAuth }                     from "../context/AuthContext";
 import { getConversations }            from "../services/api";
 import GroupChatModal                  from "./GroupChatModal";
-import "./styles/ChatList.css";
 import groupIcon                       from "../assets/group-icon.png";
 import defaultAvatar                   from "../assets/default-avatar.webp"
+import "./styles/ChatList.css";
 
 export default function ChatList() {
   const { user }                      = useAuth();

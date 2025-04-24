@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getUsers, createConversation } from "../services/api";
 import { useAuth }                     from "../context/AuthContext";
+import "./styles/GroupChatModal.css"; 
 
 export default function GroupChatModal({ onClose, onCreated }) {
   const { user } = useAuth();
@@ -67,7 +68,7 @@ export default function GroupChatModal({ onClose, onCreated }) {
                 checked={selected.has(u._id)}
                 onChange={() => toggle(u._id)}
               />
-              {u.username}
+              {" " + u.username }
             </label>
           ))}
         </div>

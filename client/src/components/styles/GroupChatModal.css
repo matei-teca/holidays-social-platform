@@ -1,37 +1,112 @@
-/* client/src/components/styles/GroupChatModal.css */
+/* GroupChatModal.css */
+
+/* Backdrop */
 .modal-backdrop {
-    position: fixed; inset:0;
-    background: rgba(0,0,0,0.4);
-    display: flex; align-items: center; justify-content: center;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     z-index: 200;
   }
+  
+  /* Modal window */
   .group-chat-modal {
-    background: white;
-    padding: 1.5rem;
+    background: var(--panel-bg);
+    border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
-    width: 90%;
+    padding: var(--spacing-lg);
+    width: 100%;
     max-width: 400px;
     box-shadow: var(--shadow);
+    font-family: var(--font-base);
   }
+  
+  /* Title */
   .group-chat-modal h2 {
-    margin-top:0; margin-bottom:1rem;
+    margin: 0 0 var(--spacing-lg);
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
     color: var(--heading-color);
   }
-  .group-chat-modal .user-list {
+  
+  /* Label + input */
+  .group-chat-modal label {
+    display: block;
+    font-size: 0.95rem;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-xxs);
+  }
+  .group-chat-modal input[type="text"] {
+    width: 100%;
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--card-bg);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .group-chat-modal input[type="text"]:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(78, 168, 222, 0.2);
+    outline: none;
+  }
+  
+  /* User list */
+  .user-list {
     max-height: 200px;
     overflow-y: auto;
     border: 1px solid var(--border-color);
     padding: var(--spacing-xs);
-    margin: var(--spacing-sm) 0;
+    margin-bottom: var(--spacing-lg);
+    border-radius: var(--border-radius);
   }
-  .group-chat-modal .user-item {
-    display: block; margin-bottom: var(--spacing-xs);
+  .user-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xxs) var(--spacing-xs);
+    cursor: pointer;
+    transition: background 0.2s;
   }
+  .user-item:hover {
+    background: var(--background-color);
+  }
+  .user-item input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+  }
+  
+  /* Actions */
   .modal-actions {
-    text-align: right;
-    margin-top: var(--spacing-sm);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-sm);
   }
   .modal-actions button {
-    margin-left: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .modal-actions button:first-child {
+    background: transparent;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+  }
+  .modal-actions button:first-child:hover {
+    background: var(--background-color);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+  }
+  .modal-actions button:last-child {
+    background: var(--primary-color);
+    color: #fff;
+  }
+  .modal-actions button:last-child:hover {
+    background: var(--accent-color);
+    transform: translateY(-1px);
   }
   
