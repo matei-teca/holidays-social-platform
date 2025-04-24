@@ -2,6 +2,8 @@
 .chat-layout {
   display: flex;
   position: relative;
+  min-height: 80vh;
+  max-height: 85vh;
 }
 .chat-sidebar {
   width: 280px;
@@ -39,7 +41,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    top: 55vh;
+    top: 65vh;
     width: 1rem;
   }
 
