@@ -5,16 +5,15 @@ import { useAuth } from "../context/AuthContext";
 import CommentSection from "./CommentSection";
 import "./styles/PostCard.css";
 
-const PostCard = ({ post, onDelete }) => {
+const PostCard = ({ post, onDelete, onJoinToggle}) => {
   const { user } = useAuth();
   const navigate  = useNavigate();
 
   // Local UI state
   const [likes, setLikes]       = useState(post.likes || 0);
   const [joiners, setJoiners]   = useState(post.joiners || []);
-  const isAuthor                 = user?.username === post.author;
-  const hasJoined                = joiners.includes(user?.username);
-
+  const isAuthor                = user?.username === post.author;
+  const hasJoined               = joiners.includes(user?.username);
   // Handlers
   const handleLike = async (e) => {
     e.stopPropagation();
@@ -31,6 +30,10 @@ const PostCard = ({ post, onDelete }) => {
     try {
       const updated = await joinPost(post._id);
       setJoiners(updated.data.joiners);
+      onJoinToggle?.(
+        updated.data, 
+        updated.data.joiners.includes(user.username)
+      );
     } catch (err) {
       console.error(err);
     }
@@ -77,7 +80,7 @@ const PostCard = ({ post, onDelete }) => {
        <div className="footer-actions-left">
          <button onClick={handleLike}>❤️ {likes}</button>
 
-         {post.joinable && (  
+         {post.joinable && (
            <button className="join-btn" onClick={handleJoin}>
              {hasJoined ? "Leave" : "Join"} ({joiners.length})
            </button>

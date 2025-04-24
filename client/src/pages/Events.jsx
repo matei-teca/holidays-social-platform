@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { getJoinableEvents, getJoinedEvents } from "../services/api";
 import PostCard from "../components/PostCard";
 import "./styles/Events.css";
@@ -26,11 +26,28 @@ const Events = () => {
     fetch();
   }, []);
 
+  const handleJoinToggle = useCallback((updatedPost, nowJoined) => {
+     // show prompt immediately
+     if (nowJoined) {
+       alert(`You joined ${updatedPost.author}’s ${updatedPost.holiday} event`);
+       setJoinable(j => j.filter(p => p._id !== updatedPost._id));
+       setJoined(j => [updatedPost, ...j]);
+     } else {
+       alert(`You left ${updatedPost.author}’s ${updatedPost.holiday} event`);
+       setJoined(j => j.filter(p => p._id !== updatedPost._id));
+       setJoinable(j => [updatedPost, ...j]);
+     }
+   }, []);
+
   const renderList = (list, emptyMessage) =>
     list.length > 0 ? (
       <div className="events-grid">
         {list.map((post) => (
-          <PostCard key={post._id} post={post} />
+          <PostCard
+            key={post._id}
+            post={post}
+            onJoinToggle={handleJoinToggle}
+          />
         ))}
       </div>
     ) : (
