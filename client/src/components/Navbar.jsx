@@ -1,16 +1,16 @@
-// src/components/Navbar.jsx
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useNotifications } from "../context/NotificationContext";
+import NotificationBell from "./NotificationBell";
 import "./styles/Navbar.css";
-import { HomeIcon } from '@heroicons/react/24/outline';
+import { HomeIcon } from "@heroicons/react/24/outline";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+  const { totalChatUnread } = useNotifications();
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
-
-  // ref for the hamburger toggle + dropdown
   const menuRef = useRef(null);
 
   const handleLogout = () => {
@@ -19,33 +19,30 @@ const Navbar = () => {
     navigate("/login");
   };
 
-  // close menu if click happens outside of menuRef
   useEffect(() => {
-    const handleClickOutside = (e) => {
+    const onClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
         setMenuOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
   }, []);
 
   return (
     <nav>
       <div className="nav-left">
-      <Link to="/" className="nav-home-icon" aria-label="Home">
-        <HomeIcon className="h-5 w-5" />
-      </Link>
+        <Link to="/" className="nav-home-icon" aria-label="Home">
+          <HomeIcon className="h-5 w-5" />
+        </Link>
       </div>
 
       {user ? (
         <>
           <span>Welcome, {user.username}!</span>
 
-          {/* hamburger + dropdown wrapped in menuRef */}
           <div className="menu-container" ref={menuRef}>
+            <NotificationBell />
             <button
               className="menu-toggle"
               aria-label="Toggle menu"
@@ -64,8 +61,15 @@ const Navbar = () => {
               <Link to="/events" onClick={() => setMenuOpen(false)}>
                 Events
               </Link>
-              {user && <Link to="/chat">Chat</Link>}
-              <button onClick={handleLogout} className="logout-bttn">Logout</button>
+              <Link to="/chat" className="chat-link" onClick={() => setMenuOpen(false)}>
+                Chat
+                {totalChatUnread > 0 && (
+                  <span className="badge">{totalChatUnread}</span>
+                )}
+              </Link>
+              <button onClick={handleLogout} className="logout-bttn">
+                Logout
+              </button>
             </div>
           </div>
         </>

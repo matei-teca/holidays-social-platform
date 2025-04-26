@@ -1,27 +1,28 @@
-// client/src/components/ChatList.jsx
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate }           from "react-router-dom";
-import { useAuth }                     from "../context/AuthContext";
-import { getConversations }            from "../services/api";
-import GroupChatModal                  from "./GroupChatModal";
-import groupIcon                       from "../assets/group-icon.png";
-import defaultAvatar                   from "../assets/default-avatar.webp";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useNotifications } from "../context/NotificationContext";
+import { getConversations } from "../services/api";
+import GroupChatModal from "./GroupChatModal";
+import groupIcon from "../assets/group-icon.png";
+import defaultAvatar from "../assets/default-avatar.webp";
 import "./styles/ChatList.css";
 
 export default function ChatList() {
-  const { user }                      = useAuth();
-  const navigate                      = useNavigate();
-  const [convos, setConvos]           = useState([]);
+  const { user } = useAuth();
+  const { chatUnreadByConvo } = useNotifications();
+  const navigate = useNavigate();
+
+  const [convos, setConvos] = useState([]);
   const [showGroupModal, setShowGroupModal] = useState(false);
 
-  // Fetch conversations on mount
+  // load conversations
   useEffect(() => {
     getConversations()
       .then((res) => setConvos(res.data))
       .catch((err) => console.error("Failed to load convos", err));
   }, []);
 
-  // When a new group is created, prepend and navigate
   const handleGroupCreated = (newConvo) => {
     setConvos((prev) => [newConvo, ...prev]);
     navigate(`/chat/${newConvo._id}`);
@@ -45,13 +46,15 @@ export default function ChatList() {
         const isGroup = Boolean(c.name);
         const label = isGroup
           ? c.name
-          : c.participants.find((p) => p.username !== user.username)
-              ?.username || user.username;
+          : c.participants.find((p) => p.username !== user.username)?.username ||
+            user.username;
 
         const avatarUrl = isGroup
           ? groupIcon
           : c.participants.find((p) => p.username !== user.username)
               ?.avatarUrl || defaultAvatar;
+
+        const unread = chatUnreadByConvo[c._id] || 0;
 
         return (
           <Link
@@ -60,7 +63,10 @@ export default function ChatList() {
             className="chat-list-item"
           >
             <img src={avatarUrl} alt={label} className="avatar-sm" />
-            <span className="chat-item-name">{label}</span>
+            <span className="chat-item-name">
+              {label}
+              {unread > 0 && <span className="badge">{unread}</span>}
+            </span>
           </Link>
         );
       })}

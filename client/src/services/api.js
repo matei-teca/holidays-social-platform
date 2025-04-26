@@ -36,6 +36,8 @@ export const getConversations = () => API.get("/conversations");
 export const getConversation  = (id) => API.get(`/conversations/${id}`);
 export const createConversation = (data) => API.post("/conversations", data);
 
+export const getNotifications = () => API.get("/notifications");
+export const markNotificationRead = (id) => API.patch(`/notifications/${id}/read`);
 
 export const uploadPublicKey = (publicKey) =>
   API.put("/users", { publicKey });;

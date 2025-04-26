@@ -72,3 +72,26 @@
     border-radius: var(--border-radius);
   }
   
+  .new-messages-divider {
+    text-align: center;
+    margin: var(--spacing) 0;
+    font-size: 0.85rem;
+    color: var(--muted-color);
+    position: relative;
+  }
+  
+  .new-messages-divider::before,
+  .new-messages-divider::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 30%;
+    height: 1px;
+    background: var(--border-color);
+  }
+  .new-messages-divider::before {
+    left: 0;
+  }
+  .new-messages-divider::after {
+    right: 0;
+  }

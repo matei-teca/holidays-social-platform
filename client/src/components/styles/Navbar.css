@@ -50,6 +50,10 @@ nav {
   background-color: white;
 }
 
+.menu-container > .notification-bell {
+  margin-right: var(--spacing-xs); /* ~0.5rem */
+}
+
 .menu-toggle {
   display: block;
   background: none;
@@ -57,11 +61,12 @@ nav {
   font-size: 1.5rem;
   cursor: pointer;
   color: var(--text-color);
-  margin-left: var(--spacing);
+  margin-left: 0;
 }
 
 .menu-container {
   position: relative;
+  display: flex;
 }
 
 .mobile-menu {
@@ -95,4 +100,25 @@ nav {
 
 .mobile-menu a:hover {
   background: var(--background-color);
+}
+
+.mobile-menu a.chat-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-xs) var(--spacing-sm); /* restore original padding */
+}
+
+.mobile-menu a.chat-link .badge {
+  /* undo the default span width:100% */
+  width: auto;
+  padding: 0 var(--spacing-xxs);
+  min-width: 1  rem;
+  background: var(--accent-color);
+  color: #fff;
+  border-radius: var(--border-radius);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+  margin: 0; /* reset any span margins */
 }

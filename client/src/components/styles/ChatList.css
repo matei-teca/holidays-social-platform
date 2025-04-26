@@ -95,3 +95,34 @@
       justify-content: center;
     }
   }
+
+  .chat-list-item .badge {
+    margin-left: auto;
+    margin-right: var(--spacing-sm);
+    background: var(--accent-color);
+    color: #fff;
+    border-radius: var(--border-radius);
+    padding: 0 var(--spacing-xxs);
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1;
+    display: inline-block;
+    min-width: 1rem;
+    text-align: center;
+  }
+
+  /* Ensure each chat‐item container is positioned for its badge */
+.chat-list-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Position the badge at the end, vertically centered */
+.chat-list-item .badge {
+  position: absolute;
+  right: var(--spacing-sm);
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+}
