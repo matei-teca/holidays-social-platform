@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+// client/src/components/CommentSection.jsx
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { getComments, createComment } from "../services/api";
 import "./styles/CommentSection.css";
@@ -14,7 +15,7 @@ const CommentSection = ({ postId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    e.stopPropagation();   // prevent navigating when submitting
+    // no need to stopPropagation here since input handles it
     try {
       const res = await createComment({ postId, text });
       setComments((c) => [res.data, ...c]);
@@ -32,6 +33,13 @@ const CommentSection = ({ postId }) => {
           value={text}
           onChange={(e) => setText(e.target.value)}
           required
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();    // prevent form auto-submit
+              handleSubmit(e);       // manually submit
+              e.stopPropagation();   // stop bubbling to PostCard
+            }
+          }}
         />
         <button type="submit">💬</button>
       </form>
