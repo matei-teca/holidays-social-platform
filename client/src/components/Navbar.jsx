@@ -1,10 +1,14 @@
 import { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import { useNotifications } from "../context/NotificationContext";
-import NotificationBell from "./NotificationBell";
+import { Link, useNavigate }           from "react-router-dom";
+import { useAuth }                     from "../context/AuthContext";
+import { useNotifications }            from "../context/NotificationContext";
+import NotificationBell                from "./NotificationBell";
 import "./styles/Navbar.css";
-import { HomeIcon } from "@heroicons/react/24/outline";
+import {
+  HomeIcon,
+  Bars3Icon,
+  XMarkIcon
+} from "@heroicons/react/24/outline";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -43,12 +47,17 @@ const Navbar = () => {
 
           <div className="menu-container" ref={menuRef}>
             <NotificationBell />
+
             <button
               className="menu-toggle"
               aria-label="Toggle menu"
               onClick={() => setMenuOpen((o) => !o)}
             >
-              ☰
+              {menuOpen ? (
+                <XMarkIcon className="icon" />
+              ) : (
+                <Bars3Icon className="icon" />
+              )}
             </button>
 
             <div className={`mobile-menu${menuOpen ? " open" : ""}`}>
@@ -61,7 +70,11 @@ const Navbar = () => {
               <Link to="/events" onClick={() => setMenuOpen(false)}>
                 Events
               </Link>
-              <Link to="/chat" className="chat-link" onClick={() => setMenuOpen(false)}>
+              <Link
+                to="/chat"
+                className="chat-link"
+                onClick={() => setMenuOpen(false)}
+              >
                 Chat
                 {totalChatUnread > 0 && (
                   <span className="badge">{totalChatUnread}</span>

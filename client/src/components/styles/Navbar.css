@@ -30,7 +30,6 @@ nav {
 }
 
 .nav-right button {
-  background-color: var(--primary-color);
   color: #fff;
   padding: var(--spacing-xxs) var(--spacing-sm);
   border-radius: var(--border-radius);
@@ -41,7 +40,6 @@ nav {
 
 .nav-right button:hover,
 .nav-right button:focus {
-  background-color: var(--accent-color);
   transform: translateY(-1px);
 }
 
@@ -56,12 +54,19 @@ nav {
 
 .menu-toggle {
   display: block;
-  background: none;
+  background: white !important;
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
   color: var(--text-color);
   margin-left: 0;
+  color: var(--text-color);
+}
+
+/* size the icon */
+.menu-toggle .icon {
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .menu-container {
